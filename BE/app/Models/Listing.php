@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Listing extends Model
 {
     //
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -25,7 +27,18 @@ class Listing extends Model
         'mini_cafe_available',
         'cinema_available'
     ];
-    protected $cast = [
+    protected $casts = [
         'attachments' => 'array'
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = $value;
+        $this->attributes['slug'] = Str::slug($value);
+    }
 }
