@@ -24,7 +24,7 @@ class ListingFactory extends Factory
             'sqft' => fake()->numberBetween(1, 5),
             'wifi_speed' => fake()->randomNumber(2, true),
             'max_person' => fake()->numberBetween(2, 5),
-            'price_per_day' => fake()->numberBetween(1, 10000),
+            'price_per_day' => fake()->numberBetween(1, 1000),
             'full_support_available' => fake()->boolean(),
             'gym_area_available' => fake()->boolean(),
             'mini_cafe_available' => fake()->boolean(),
