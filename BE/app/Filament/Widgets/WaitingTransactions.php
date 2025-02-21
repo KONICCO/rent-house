@@ -1,41 +1,28 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Widgets;
 
-use App\Filament\Resources\TransactionResource\Pages;
-use App\Filament\Resources\TransactionResource\RelationManagers;
-use App\Models\Transaction;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Transaction;
+use Filament\Tables\Actions\Action;
+use Filament\Support\Enums\FontWeight;
+use Filament\Notifications\Notification;
+use Filament\Widgets\TableWidget as BaseWidget;
 
-class TransactionResource extends Resource
+class WaitingTransactions extends BaseWidget
 {
-    protected static ?string $model = Transaction::class;
+    protected static ?int $sort = 3;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
-    public static function canCreate(): bool
-    {
-        return false;
-    }
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([]);
-    }
-
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->query(
+                // ...
+                Transaction::query()->whereStatus('waiting')
+            )
             ->columns([
+                // ...
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable()->weight(FontWeight::Bold),
@@ -74,14 +61,6 @@ class TransactionResource extends Resource
                     'canceled' => 'danger',
                 }),
             ])
-            ->filters([
-                //
-                SelectFilter::make('status')->options([
-                    'waiting' => 'Waiting',
-                    'approved' => 'Approved',
-                    'canceled' => 'Canceled',
-                ])
-            ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 Action::make('Approve')
@@ -93,27 +72,6 @@ class TransactionResource extends Resource
                             Notification::make()->success()->title('Transaction Approved')->body('Transaction has been approve')->icon('heroicon-o-check')->send();
                         })
                     ->hidden(condition: fn(Transaction $transaction) => $transaction->status !== 'waiting')
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListTransactions::route('/'),
-            'create' => Pages\CreateTransaction::route('/create'),
-            'edit' => Pages\EditTransaction::route('/{record}/edit'),
-        ];
     }
 }
