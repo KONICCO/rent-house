@@ -28,7 +28,7 @@ class MonthlyTransactionsChart extends ChartWidget
                     'data' => $trend->map(fn(TrendValue $trendValue)=> $trendValue->aggregate)
                 ],
             ],
-            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'labels' => $trend->map(fn(TrendValue $trendValue)=> $trendValue->aggregate),
         ];
     }
 
