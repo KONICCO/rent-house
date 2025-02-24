@@ -41,4 +41,8 @@ class Listing extends Model
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class, 'listing_id', 'id');
+    }
 }
