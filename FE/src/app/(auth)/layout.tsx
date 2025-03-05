@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import '@/app/globals.css';
 import { Toaster } from '@/components/atomics/toaster';
-import ReduxProvider from '../../providers/redux';
+import ReduxProvider from '@/providers/redux';
 
 const inter = Poppins({ weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], subsets: ['latin']});
 

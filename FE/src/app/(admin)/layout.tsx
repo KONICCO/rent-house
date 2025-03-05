@@ -4,7 +4,7 @@ import '@/app/globals.css';
 import TopMenu from '@/components/molecules/admin/top-menu';
 import SideMenu from '@/components/molecules/admin/side-menu';
 import { Toaster } from '@/components/atomics/toaster';
-import ReduxProvider from '../../providers/redux';
+import ReduxProvider from '@/providers/redux';
 
 const poppins = Poppins({ weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], subsets: ['latin']});
 
