@@ -17,6 +17,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/atomics/use-toast";
+import { useRegisterMutation } from "@/services/auth.service";
 
 const schema = yup.object().shape({
   name: yup.string().min(5).required(),
@@ -26,7 +27,6 @@ const schema = yup.object().shape({
 });
 
 type FormData = yup.InferType<typeof schema>;
-
 function SignUp() {
   const router = useRouter();
   const { toast } = useToast();
@@ -39,16 +39,27 @@ function SignUp() {
       password: "",
     },
   });
+  const [register, { isLoading }] = useRegisterMutation();
 
-  function onSubmit(values: FormData) {
-    console.log("🚀 ~ onSubmit ~ values:", values)
-    form.reset();
-    toast({
-      title: "Welcome",
-      description: "Sign in successfully",
-      open: true,
-    });
-    router.push("/");
+  async function onSubmit(values: FormData) {
+    try {
+      const res = await register({...values, password_confirmation: values.password}).unwrap();
+      console.log("🚀 ~ onSubmit ~ res:", res);
+      form.reset();
+      toast({
+        title: "Welcome",
+        description: "Sign in successfully",
+        open: true,
+      });
+      router.push("/");
+    } catch (error) {
+      toast({
+        title: "Failed",
+        description: (error as any).data.message,
+        variant: "destructive",
+
+      });
+    }
   }
 
   return (
@@ -165,7 +176,9 @@ function SignUp() {
               </label>
             </div>
 
-            <Button type="submit">Sign Up</Button>
+            <Button type="submit" disabled={isLoading}>
+              Sign Up
+            </Button>
             <Link href="/sign-in">
               <Button variant="third" className="mt-3">
                 Sign In to My Account
