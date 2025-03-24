@@ -1,7 +1,9 @@
 import nextauth from "next-auth";
 // Mengimpor library `next-auth` yang digunakan untuk mengimplementasikan otentikasi di aplikasi Next.js.
+import { authOptions } from './../../../../lib/auth';
 
-const handler = nextauth({});
+
+const handler = nextauth(authOptions);
 // Membuat handler otentikasi menggunakan fungsi `nextauth`. 
 // Parameter kosong `{}` berarti konfigurasi default digunakan. 
 // Anda dapat menambahkan konfigurasi seperti provider, callback, dll., di dalam objek ini.
